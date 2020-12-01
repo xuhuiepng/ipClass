@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.cnic.security.ipservice.dao.NtiHistoryDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="cn.cnic.security.ipservice.entity.NtiHistoryEntity" id="ntiHistoryMap">
+        <result property="historyDate" column="history_date"/>
+        <result property="ip" column="ip"/>
+        <result property="attackType" column="attack_type"/>
+        <result property="credit" column="credit"/>
+        <result property="creditLevel" column="credit_level"/>
+        <result property="source" column="source"/>
+    </resultMap>
+
+
+</mapper>

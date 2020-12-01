@@ -1,0 +1,87 @@
+{
+  "code": 0,
+  "msg": "",
+  "count": 1000,
+  "data": [
+    {
+      "id": 1,
+      "ipaddress": "172.154.23.1",
+      "country": "中国",
+      "province": "湖南",
+      "city": "长沙",
+      "yunyingshang": "湖南移动"
+    },
+    {
+      "id": 2,
+      "ipaddress": "172.154.23.2",
+      "country": "中国",
+      "province": "湖南",
+      "city": "长沙",
+      "yunyingshang": "湖南移动"
+    },
+    {
+      "id": 3,
+      "ipaddress": "172.154.23.3",
+      "country": "中国",
+      "province": "湖南",
+      "city": "长沙",
+      "yunyingshang": "湖南移动"
+    },
+    {
+      "id": 4,
+      "ipaddress": "172.154.23.4",
+      "country": "中国",
+      "province": "湖南",
+      "city": "长沙",
+      "yunyingshang": "湖南移动"
+    },
+    {
+      "id": 5,
+      "ipaddress": "172.154.23.5",
+      "country": "中国",
+      "province": "湖南",
+      "city": "长沙",
+      "yunyingshang": "湖南移动"
+    },
+    {
+      "id": 6,
+      "ipaddress": "172.154.23.6",
+      "country": "中国",
+      "province": "湖南",
+      "city": "长沙",
+      "yunyingshang": "湖南移动"
+    },
+    {
+      "id": 7,
+      "ipaddress": "172.154.23.7",
+      "country": "中国",
+      "province": "湖南",
+      "city": "长沙",
+      "yunyingshang": "湖南移动"
+    },
+    {
+      "id": 8,
+      "ipaddress": "172.154.23.8",
+      "country": "中国",
+      "province": "湖南",
+      "city": "长沙",
+      "yunyingshang": "湖南移动"
+    },
+    {
+      "id": 9,
+      "ipaddress": "172.154.23.9",
+      "country": "中国",
+      "province": "湖南",
+      "city": "长沙",
+      "yunyingshang": "湖南移动"
+    },
+    {
+      "id": 10,
+      "ipaddress": "172.154.23.0",
+      "country": "中国",
+      "province": "湖南",
+      "city": "长沙",
+      "yunyingshang": "湖南移动"
+    }
+  ]
+}

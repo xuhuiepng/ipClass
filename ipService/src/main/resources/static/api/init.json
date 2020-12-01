@@ -1,0 +1,32 @@
+{
+  "homeInfo": {
+    "title": "首页",
+    "href": "/page/ipLocation.html"
+  },
+  "logoInfo": {
+    "title": "IP信息系统",
+    "image": "images/logo.png",
+    "href": ""
+  },
+  "menuInfo": [
+    {
+      "title": "IP查询",
+      "icon": "fa fa-address-book",
+      "href": "/page/ipLocation.html"
+    },
+    {
+      "title": "批量查询",
+      "icon": "fa fa-address-book",
+      "href": "/page/batch-ipsearch-copy.html",
+      "target": "_self",
+      "child": [
+        {
+          "title": "主页一",
+          "href": "page/welcome-1.html",
+          "icon": "fa fa-tachometer",
+          "target": "_self"
+        }
+      ]
+    }
+  ]
+}

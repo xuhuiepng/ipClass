@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>IP信息查询</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="../lib/layui-v2.5.5/css/layui.css" media="all">
+    <link rel="stylesheet" href="../css/public.css" media="all">
+</head>
+
+<body>
+    <div class="layuimini-container">
+        <div class="row" style="background: #96b97d;padding-left: 10px;padding-right: 10px;">
+            <div class="col nav layui-tab ">
+                <ul class="pc-nav layui-tab-title" style="font-size: 1.1em;">
+                    <li style="display: inline;margin: 0 100px 0 0;"><a>IP查询</a></li>
+                    <li style="display: inline;margin: 0 100px 0 0;"><a>批量导入</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="layui-tab-content">
+            <div class="layuimini-main layui-tab-item layui-show">
+                <div style="background-color: #021222">
+                    <img src="https://cdn.ipip.net/loveapp/ipip/www_en/theme/css/img/icon_Location_Search.png" alt=""
+                        style="clear: both;
+                display: block;
+                margin: 0 auto 0;
+                padding-top: 40px;
+                height: 100px;">
+                    <form method="post" action="/ip.html">
+                        <input type="hidden" name="csrf_token" value="62372bf74259a5d9260ceadbabf64c3e">
+                        <input type="text" name="ip" placeholder="请输入IP地址，如：8.8.8.8" autocomplete="off" style="display: block;
+                        margin: 10px auto 25px;
+                        width: 700px;
+                        height: 60px;
+                        line-height: 60px;
+                        border: 1px solid #0096e6;
+                        border-radius: 60px;
+                        text-align: center;
+                        font-size: 25px;
+                        color: #fff;
+                        background: transparent;">
+                        <div style="width: 300px;margin: 0 auto;">
+                            <button id="ip_query" type="submit" data-limit="3/1000" style="width: 120px;display: block;
+                        width: 80px;
+                        height: 40px;
+                        line-height: 36px;
+                        margin: 0 auto;
+                        background: transparent;
+                        border: 1px solid #0096e6;
+                        color: #fff;
+                        border-radius: 40px;
+                        font-size: 14px;
+                        text-align: center;
+                        cursor: pointer;
+                        outline: 0;">查询
+                            </button>
+                            <div style="text-align: center;color: #fff;"><a href="#" id="myip"
+                                    style="color: #acacac;line-height: 30px;">查询自己的IP</a></div>
+                        </div>
+                    </form>
+                </div>
+                <script type="text/html" id="toolbarDemo">
+            <div class="layui-btn-container">
+                <button class="layui-btn layui-btn-normal layui-btn-sm data-add-btn" lay-event="add"> 添加 </button>
+                <button class="layui-btn layui-btn-sm layui-btn-danger data-delete-btn" lay-event="delete"> 删除 </button>
+            </div>
+        </script>
+
+                <table class="layui-hide" id="currentTableId" lay-filter="currentTableFilter"></table>
+
+                <script type="text/html" id="currentTableBar">
+            <a class="layui-btn layui-btn-normal layui-btn-xs data-count-edit" lay-event="edit">编辑</a>
+            <a class="layui-btn layui-btn-xs layui-btn-danger data-count-delete" lay-event="delete">删除</a>
+        </script>
+
+            </div>
+            <div class="layui-tab-item">内容2</div>
+        </div>
+    </div>
+    <script src="../lib/layui-v2.5.5/layui.js" charset="utf-8"></script>
+    <script>
+        layui.use(['form', 'table','element'], function () {
+            var element = layui.element;
+            var $ = layui.jquery,
+                form = layui.form,
+                table = layui.table;
+
+            table_copy.render({
+                elem: '#currentTableId',
+                url: '../api/table.json',
+                toolbar: '#toolbarDemo',
+                defaultToolbar: ['filter', 'exports', 'print', {
+                    title: '提示',
+                    layEvent: 'LAYTABLE_TIPS',
+                    icon: 'layui-icon-tips'
+                }],
+                cols: [[
+                    { type: "checkbox", width: 50 },
+                    { field: 'id', width: 80, title: 'ID', sort: true },
+                    { field: 'username', width: 80, title: '用户名' },
+                    { field: 'sex', width: 80, title: '性别', sort: true },
+                    { field: 'city', width: 80, title: '城市' },
+                    { field: 'sign', title: '签名', minWidth: 150 },
+                    { field: 'experience', width: 80, title: '积分', sort: true },
+                    { field: 'score', width: 80, title: '评分', sort: true },
+                    { field: 'classify', width: 80, title: '职业' },
+                    { field: 'wealth', width: 135, title: '财富', sort: true },
+                    { title: '操作', minWidth: 150, toolbar: '#currentTableBar', align: "center" }
+                ]],
+                limits: [10, 15, 20, 25, 50, 100],
+                limit: 15,
+                page: true,
+                skin: 'line'
+            });
+
+            // 监听搜索操作
+            form.on('submit(data-search-btn)', function (data) {
+                var result = JSON.stringify(data.field);
+                layer.alert(result, {
+                    title: '最终的搜索信息'
+                });
+
+                //执行搜索重载
+                table_copy.reload('currentTableId', {
+                    page: {
+                        curr: 1
+                    }
+                    , where: {
+                        searchParams: result
+                    }
+                }, 'data');
+
+                return false;
+            });
+
+            /**
+             * toolbar监听事件
+             */
+            table_copy.on('toolbar(currentTableFilter)', function (obj) {
+                if (obj.event === 'add') {  // 监听添加操作
+                    var index = layer.open({
+                        title: '添加用户',
+                        type: 2,
+                        shade: 0.2,
+                        maxmin: true,
+                        shadeClose: true,
+                        area: ['100%', '100%'],
+                        content: '../page/table/add.html',
+                    });
+                    $(window).on("resize", function () {
+                        layer.full(index);
+                    });
+                } else if (obj.event === 'delete') {  // 监听删除操作
+                    var checkStatus = table_copy.checkStatus('currentTableId')
+                        , data = checkStatus.data;
+                    layer.alert(JSON.stringify(data));
+                }
+            });
+
+            //监听表格复选框选择
+            table_copy.on('checkbox(currentTableFilter)', function (obj) {
+                console.log(obj)
+            });
+
+            table_copy.on('tool(currentTableFilter)', function (obj) {
+                var data = obj.data;
+                if (obj.event === 'edit') {
+
+                    var index = layer.open({
+                        title: '编辑用户',
+                        type: 2,
+                        shade: 0.2,
+                        maxmin: true,
+                        shadeClose: true,
+                        area: ['100%', '100%'],
+                        content: '../page/table/edit.html',
+                    });
+                    $(window).on("resize", function () {
+                        layer.full(index);
+                    });
+                    return false;
+                } else if (obj.event === 'delete') {
+                    layer.confirm('真的删除行么', function (index) {
+                        obj.del();
+                        layer.close(index);
+                    });
+                }
+            });
+
+        });
+    </script>
+
+</body>
+
+</html>

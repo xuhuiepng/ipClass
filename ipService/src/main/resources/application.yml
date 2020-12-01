@@ -1,0 +1,91 @@
+server:
+  port: 8082
+  servlet:
+    context-path: /
+
+spring:
+  jackson:
+    time-zone: GMT+8
+    date-format: yyyy-MM-dd HH:mm:ss
+    serialization:
+      WRITE_DATES_AS_TIMESTAMPS: false
+      FAIL_ON_EMPTY_BEANS: false
+    deserialization:
+      FAIL_ON_UNKNOWN_PROPERTIES: false
+    default-property-inclusion: non_null
+    mapper:
+      PROPAGATE_TRANSIENT_MARKER: true
+    parser:
+        ALLOW_BACKSLASH_ESCAPING_ANY_CHARACTER: true
+   ## 静态资源映射
+  resources:
+    static-locations: classpath:/static/,classpath:/views/
+  cache:
+    caffeine:
+      spec: initialCapacity=20,maximumSize=1024,refreshAfterWrite=7d
+  aop:
+    proxy-target-class: true
+  servlet:
+    multipart:
+      max-file-size: 5MB
+      max-request-size: 10MB
+  liquibase:
+    enabled: false
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+    driverClassName: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://159.226.16.181:3306/nti_local?characterEncoding=utf8&serverTimezone=Asia/Shanghai&useSSL=false
+    username: xiayu
+    password: fZVczn86
+    hikari:
+      auto-commit: false
+      connection-timeout: 30000
+      idle-timeout: 25000
+      login-timeout: 5
+      max-lifetime: 30000
+      read-only: false
+      validation-timeout: 3000
+      maximum-pool-size: 5
+      minimum-idle: 1
+      data-source-properties:
+        cachePrepStmts: true
+        prepStmtCacheSize: 250
+        prepStmtCacheSqlLimit: 2048
+        useServerPrepStmts: true
+        useLocalSessionState: true
+        rewriteBatchedStatements: true
+        cacheResultSetMetadata: true
+        cacheServerConfiguration: true
+        elideSetAutoCommits: true
+        maintainTimeStats: false
+
+logging:
+  # 配置输出额日志文件名,可以带路径
+  #  file: out.log
+  # 配置日志存放路径,日志文件名为：spring.log
+  file:
+    # 设置日志文件大小
+    max-size: 5MB
+    path: ./logs
+
+# 存放ip的配置
+ip-api-config:
+  ip-api:
+    url: http://ip-api.com/json/{ip}?lang=zh-CN
+    batchUrl: http://ip-api.com/batch?lang=zh-CN
+  # 高德
+  amap:
+    url: https://restapi.amap.com/v3/ip?ip={ip}&output=JSON&key={key}
+    keys: [c19614204ec69c69cdffc618a3aa8ecd,8edf067c9ae64e25a36759348cc59268]
+
+mybatis-plus:
+  mapper-locations: classpath:mapper/*Mapper.xml
+  global-config:
+    db-config:
+      field-strategy: not_empty
+      id-type: auto
+      db-type: mysql
+    banner: false
+    # super-mapper-class: org.crown.framework.mapper.BaseMapper
+  #type-enums-package: org.crown.enums
+  #type-aliases-package: cn.cnic.xiandao.model

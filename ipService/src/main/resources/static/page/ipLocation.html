@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>IP全部信息查询</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="../lib/layui-v2.5.5/css/layui.css" media="all">
+    <link rel="stylesheet" href="../css/public.css" media="all">
+</head>
+<body>
+<div class="layuimini-container">
+    <div class="layuimini-main">
+        <div class="layui-row layui-col-space15">
+            <div class="layui-col-md15">
+                    <div style="background-color: #021222;">
+                        <img src="https://cdn.ipip.net/loveapp/ipip/www_en/theme/css/img/icon_Location_Search.png" alt="" style="clear: both;
+                display: block;
+                margin: 0 auto 0;
+                padding-top: 40px;
+                height: 60px;">
+                        <form>
+                            <input type="text" name="ip"  placeholder="请输入IP地址，如：8.8.8.8" autocomplete="off" style="display: block;
+                        margin: 10px auto 25px;
+                        width: 700px;
+                        height: 60px;
+                        line-height: 60px;
+                        border: 1px solid #0096e6;
+                        border-radius: 60px;
+                        text-align: center;
+                        font-size: 25px;
+                        color: #fff;
+                        background: transparent;">
+                            <div style="width: 300px;height:60px;margin: 0 auto;">
+                                <button id="ip_query" class="layui-btn" lay-submit="" lay-filter="ipQuery_btn" type="submit" data-limit="3/1000" style="width: 120px;display: block;
+                        width: 80px;
+                        height: 40px;
+                        line-height: 36px;
+                        margin: 0 auto;
+                        background: transparent;
+                        border: 1px solid #0096e6;
+                        color: #fff;
+                        border-radius: 40px;
+                        font-size: 14px;
+                        text-align: center;
+                        cursor: pointer;
+                        outline: 0;">查询
+                                </button>
+                            </div>
+<!--                            <div style="text-align: center;color: #fff;"><a href="#" id="myip" style="color: #acacac;line-height: 30px;">     </a></div>-->
+                        </form>
+                    </div>
+            </div>
+        </div>
+        <fieldset class="layui-elem-field layui-field-title">
+            <legend>IP归属</legend>
+        </fieldset>
+        <table class="layui-hide" id="ipRangeEntityTable"></table>
+
+
+        <fieldset class="layui-elem-field layui-field-title">
+            <legend>各库查询结果</legend>
+        </fieldset>
+        <table class="layui-hide" id="AllTableId" lay-filter="currentTableFilter"></table>
+
+        <fieldset class="layui-elem-field layui-field-title">
+            <legend>信誉历史</legend>
+        </fieldset>
+        <table class="layui-hide" id="HistoryTableId" lay-filter="currentTableFilter"></table>
+    </div>
+</div>
+
+
+<script src="../lib/layui-v2.5.5/layui.js" charset="utf-8"></script>
+<script>
+    layui.use(['form', 'table'], function () {
+        var $ = layui.jquery,
+            form = layui.form,
+            table = layui.table;
+
+
+        // 监听搜索操作
+        form.on('submit(ipQuery_btn)', function (data) {
+            var ip = $('input[name="ip"]').val();
+            var reg =/^(?:(?:2[0-4][0-9]\.)|(?:25[0-5]\.)|(?:1[0-9][0-9]\.)|(?:[1-9][0-9]\.)|(?:[0-9]\.)){3}(?:(?:2[0-4][0-9])|(?:25[0-5])|(?:1[0-9][0-9])|(?:[1-9][0-9])|(?:[0-9]))$/;
+            var re = new RegExp(reg);
+            if (ip.length === 0 || ip === "null") {
+                ip = "127.0.0.1";
+            }
+            if(ip === "0.0.0.0"){
+                alert("自动设为本机IP")
+            }
+            if(!re.test(ip)){
+                alert("请填写有效的IP地址！");
+                return false;
+            }
+
+            //ip归属表格
+            table.render({
+                elem: '#ipRangeEntityTable',
+                url: '/ipInfo/'+ip,
+                parseData: function (res) { //res 即为原始返回的数据
+                    return {
+                        "code": res.code, //解析接口状态
+                        "msg": res.msg, //解析提示文本
+                        "data": res.ipSegmentResponses //解析数据列表
+                    };
+                },
+                cols: [[
+                    {field: 'queryIp', minWidth: 80,style:'background-color: #009688; color: #fff;', title: 'IP'},
+                    {field: 'orgName', minWidth: 80,style:'background-color: #009688; color: #fff;', title: '机构名称'},
+                ]],
+                page: false,
+                skin: 'line'
+            });
+
+
+            //所有
+            table.render({
+                elem: '#AllTableId',
+                url: '/ipInfo/'+ip,
+                parseData: function (res) { //res 即为原始返回的数据
+                    return {
+                        "code": res.code, //解析接口状态
+                        "msg": res.msg, //解析提示文本
+                        "data": res.list //解析数据列表
+                    };
+                },
+                cols: [[
+                    {field: 'source', width: 200, title: '查询源'},
+                    {field: 'query', width: 250, title: 'IP'},
+                    {field: 'country', width: 200, title: '国家'},
+                    {field: 'province', width: 250, title: '省（市、自治区）'},
+                    {field: 'city', width: 250, title: '城市'},
+                    {field: 'lon', width: 200, title: '经度'},
+                    {field: 'lat', width: 200, title: '纬度'},
+                    {field: 'isp', minWidth: 100, title: '运营商'},
+                ]],
+                page: false,
+                skin: 'line'
+            });
+
+            //信誉历史
+            table.render({
+                elem: '#HistoryTableId',
+                url: '/credit/' + ip,
+                parseData: function (res) { //res 即为原始返回的数据
+                    return {
+                        "code": res.code, //解析接口状态
+                        "msg": res.msg, //解析提示文本
+                        "data": res.resList //解析数据列表
+                    };
+                },
+                cols: [[
+                    {field: 'historyDateStr', minWidth: 80, title: '时间'},
+                    {field: 'ip', minWidth: 120, title: 'IP'},
+                    {field: 'attackTypeCN', minWidth: 120, title: '攻击类型'},
+                    {field: 'credit', width: 100, title: '评分'},
+                    {field: 'creditLevel', minWidth: 100, title: '评分等级'},
+                    {field: 'source', minWidth: 100, title: '来源'},
+                ]],
+                page: false,
+                skin: 'line'
+            });
+
+            return false;
+        });
+
+    });
+</script>
+
+</body>
+</html>

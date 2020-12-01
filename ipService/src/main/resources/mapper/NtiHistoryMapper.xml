@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.cnic.security.ipservice.dao.NtiHistoryDao">
+
+    <!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="cn.cnic.security.ipservice.entity.NtiHistoryEntity" id="ntiHistoryMap">
+        <result property="historyDate" column="history_date"/>
+        <result property="ip" column="ip"/>
+        <result property="attackType" column="attack_type"/>
+        <result property="credit" column="credit"/>
+        <result property="creditLevel" column="credit_level"/>
+        <result property="source" column="source"/>
+    </resultMap>
+
+    <select id="selectAll" resultMap="ntiHistoryMap">
+        SELECT
+            n.*
+        FROM
+            nti_history n
+        INNER JOIN (
+                SELECT
+                max( t.history_date ) history_date,
+                t.ip
+                FROM
+                ( SELECT history_date, ip FROM nti_history WHERE ip IN
+                <foreach item="ip" index="index" collection="ipsList" open="(" separator="," close=")">
+                    #{ip}
+                </foreach>
+                ) t
+                GROUP BY
+                t.ip
+                ) h
+        ON n.ip = h.ip
+        AND n.history_date = h.history_date
+        ORDER BY
+        field( n.ip,
+        <foreach collection="ipsList" index="index" item="ip" separator=",">
+            #{ip}
+        </foreach>
+        )
+    </select>
+
+
+</mapper>
