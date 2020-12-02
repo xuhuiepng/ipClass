@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.cnic.security.ipservice.dao.SeebugSpiderDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="cn.cnic.security.ipservice.entity.SeebugSpiderEntity" id="seebugSpiderMap">
+        <result property="id" column="id"/>
+        <result property="time" column="time"/>
+        <result property="title" column="title"/>
+        <result property="url" column="url"/>
+        <result property="ssvid" column="ssvid"/>
+        <result property="cveid" column="cveid"/>
+        <result property="source" column="source"/>
+        <result property="type" column="type"/>
+        <result property="informationenable" column="InformationEnable"/>
+        <result property="rulesid" column="RulesId"/>
+    </resultMap>
+    <select id="getSeebugSpiderDao" resultType="cn.cnic.security.ipservice.entity.SeebugSpiderEntity">
+        SELECT * FROM seebug_spider a
+        WHERE
+        <if test="startTime != null and endTime != null">
+            time BETWEEN #{startTime} AND #{endTime}
+        </if>
+        <if test="content != null">
+            and a.title like '%'||#{content}||'%'
+        </if>
+        <if test="type != null">
+            and a.type = #{type}
+        </if>
+    </select>
+
+
+</mapper>

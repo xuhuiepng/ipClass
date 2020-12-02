@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.cnic.security.ipservice.dao.ZoneTodayDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="cn.cnic.security.ipservice.entity.ZoneTodayEntity" id="zoneTodayMap">
+        <result property="id" column="id"/>
+        <result property="time" column="time"/>
+        <result property="title" column="title"/>
+        <result property="url" column="url"/>
+        <result property="ip" column="ip"/>
+        <result property="country" column="country"/>
+        <result property="os" column="os"/>
+        <result property="webos" column="webos"/>
+        <result property="fameurl" column="fameurl"/>
+        <result property="informationenable" column="InformationEnable"/>
+        <result property="rulesid" column="RulesId"/>
+    </resultMap>
+    <select id="getZoneTodayDao" resultType="cn.cnic.security.ipservice.entity.ZoneTodayEntity">
+        SELECT * FROM zone_today a
+        WHERE
+        <if test="startTime != null and endTime != null">
+            time BETWEEN #{startTime} AND #{endTime}
+        </if>
+        <if test="content != null">
+            and a.title like '%'||#{content}||'%'
+        </if>
+        <if test="os != null">
+            and a.os = #{os}
+        </if>
+        <if test="country != null">
+            and a.country = #{country}
+        </if>
+    </select>
+
+
+</mapper>

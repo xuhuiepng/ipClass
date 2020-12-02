@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.cnic.security.ipservice.dao.CnvdSpiderDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="cn.cnic.security.ipservice.entity.CnvdSpiderEntity" id="cnvdSpiderMap">
+        <result property="id" column="id"/>
+        <result property="time" column="time"/>
+        <result property="title" column="title"/>
+        <result property="url" column="url"/>
+        <result property="cnvdId" column="CNVD_ID"/>
+        <result property="cveId" column="CVE_ID"/>
+        <result property="level" column="level"/>
+        <result property="description" column="description"/>
+        <result property="influence" column="influence"/>
+        <result property="leixin" column="leixin"/>
+        <result property="refer" column="refer"/>
+        <result property="solution" column="solution"/>
+        <result property="patchurl" column="patchurl"/>
+        <result property="informationenable" column="InformationEnable"/>
+        <result property="rulesid" column="RulesId"/>
+    </resultMap>
+
+    <select id="getCnvdSpiderDao" resultType="cn.cnic.security.ipservice.entity.CnvdSpiderEntity">
+        SELECT * FROM cnvd_spider a
+        WHERE
+        <if test="startTime != null and endTime != null">
+            time BETWEEN #{startTime} AND #{endTime}
+        </if>
+        <if test="level != null">
+            and a.level = #{level}
+        </if>
+        <if test="content != null">
+            and a.title like '%'||#{content}||'%'
+        </if>
+    </select>
+</mapper>
