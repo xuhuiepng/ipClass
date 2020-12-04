@@ -27,6 +27,7 @@
         <if test="ip != null">
             and a.ip = #{ip}
         </if>
+        order by time desc
     </select>
     <select id="getPublicData" resultType="cn.cnic.security.ipservice.common.utils.IntelligenceEntity">
      select * from (
