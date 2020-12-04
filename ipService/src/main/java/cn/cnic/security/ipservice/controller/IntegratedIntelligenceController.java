@@ -78,6 +78,7 @@ public class IntegratedIntelligenceController {
                 }
                 Page<CnvdSpiderEntity> myPage = new Page<CnvdSpiderEntity>(pageNum, pageSize);
                 conditionQueryService.getCnvdSpider(myPage,st,et,content,level);
+                map.put("sum",myPage.getTotal());
                 map.put("data", myPage.getRecords());
                 map.put("msg","success");
                 map.put("code","0");
@@ -114,6 +115,7 @@ public class IntegratedIntelligenceController {
                 }
                 Page<RedqueenEntity> myPage = new Page<RedqueenEntity>(pageNum, pageSize);
                 conditionQueryService.getRedqueen(myPage,st,et,content,tag);
+                map.put("sum",myPage.getTotal());
                 map.put("data",myPage.getRecords());
                 map.put("msg","success");
                 map.put("code","0");
@@ -150,6 +152,7 @@ public class IntegratedIntelligenceController {
                 }
                 Page<ScapSpiderEntity> myPage = new Page<ScapSpiderEntity>(pageNum, pageSize);
                 conditionQueryService.getScapSpider(myPage,st, et, content);
+                map.put("sum",myPage.getTotal());
                 map.put("data",myPage.getRecords());
                 map.put("msg","success");
                 map.put("code","0");
@@ -186,6 +189,7 @@ public class IntegratedIntelligenceController {
                 }
                 Page<SecuritySpiderEntity> myPage = new Page<SecuritySpiderEntity>(pageNum, pageSize);
                 conditionQueryService.getSecuritySpider(myPage,st, et, content, level);
+                map.put("sum",myPage.getTotal());
                 map.put("data",myPage.getRecords());
                 map.put("msg","success");
                 map.put("code","0");
@@ -222,6 +226,7 @@ public class IntegratedIntelligenceController {
                 }
                 Page<SeebugSpiderEntity> myPage = new Page<SeebugSpiderEntity>(pageNum, pageSize);
                 conditionQueryService.getSeebugSpider(myPage,st, et, content, type);
+                map.put("sum",myPage.getTotal());
                 map.put("data",myPage.getRecords());
                 map.put("msg","success");
                 map.put("code","0");
@@ -258,6 +263,7 @@ public class IntegratedIntelligenceController {
                 }
                 Page<VxvaultEntity> myPage = new Page<VxvaultEntity>(pageNum, pageSize);
                 conditionQueryService.getVxvault(myPage,st, et, content, ip);
+                map.put("sum",myPage.getTotal());
                 map.put("data",myPage.getRecords());
                 map.put("msg", "success");
                 map.put("code", "0");
@@ -294,6 +300,7 @@ public class IntegratedIntelligenceController {
                 }
                 Page<ZoneTodayEntity> myPage = new Page<ZoneTodayEntity>(pageNum, pageSize);
                 conditionQueryService.getZoneToday(myPage,st, et, content, country, os);
+                map.put("sum",myPage.getTotal());
                 map.put("data",myPage.getRecords());
                 map.put("msg", "success");
                 map.put("code", "0");
