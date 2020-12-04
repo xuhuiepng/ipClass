@@ -34,7 +34,7 @@ spring:
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
     driverClassName: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://159.226.16.181:3306/nti_local?characterEncoding=utf8&serverTimezone=Asia/Shanghai&useSSL=false&useOldAliasMetadataBehavior=true
+    url: jdbc:mysql://159.226.16.181:3306/nti_local?characterEncoding=utf8&serverTimezone=Asia/Shanghai&useSSL=false
     username: xiayu
     password: fZVczn86
     hikari:
