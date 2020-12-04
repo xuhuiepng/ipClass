@@ -55,7 +55,7 @@ public class IntegratedIntelligenceController {
     /**
      *分页查询漏洞平台
      */
-    @RequestMapping(value = "/getCnvdSpider")
+    @RequestMapping(value = "/CnvdSpider/codition")
     @ResponseBody
     public String getCnvdSpider(@RequestParam(value = "startTime") String startTime,@RequestParam(value = "endTime") String endTime,@RequestParam(value = "content",required=false) String content,@RequestParam(value = "level" ,required=false) String level,@RequestParam(value = "page",required = false,defaultValue = "1") String page,@RequestParam(value = "size",required = false,defaultValue = "10") String size){
         Map<String,Object> map = new HashMap<>();
@@ -92,7 +92,7 @@ public class IntegratedIntelligenceController {
     /**
      *分页查询情报https://redqueen.tj-un.com/AllFilterIntel.html?key_word=%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8&type=tag
      */
-    @RequestMapping(value = "/getRedqueen")
+    @RequestMapping(value = "/Redqueen/codition")
     @ResponseBody
     public String getRedqueen(@RequestParam(value = "startTime") String startTime,@RequestParam(value = "endTime") String endTime,@RequestParam(value = "content",required=false) String content,@RequestParam(value = "tag",required=false) String tag,@RequestParam(value = "page",required = false,defaultValue = "1") String page,@RequestParam(value = "size",required = false,defaultValue = "10") String size){
         Map<String,Object> map = new HashMap<>();
@@ -129,7 +129,7 @@ public class IntegratedIntelligenceController {
     /**
      *分页查询漏洞平台http://www.scap.org.cn/vulns?view=global
      */
-    @RequestMapping(value = "/getScapSpider")
+    @RequestMapping(value = "/ScapSpider/codition")
     @ResponseBody
     public String getScapSpider(@RequestParam(value = "startTime") String startTime,@RequestParam(value = "endTime") String endTime,@RequestParam(value = "content",required = false) String content,@RequestParam(value = "page",required = false,defaultValue = "1") String page,@RequestParam(value = "size",required = false,defaultValue = "10") String size){
         Map<String,Object> map = new HashMap<>();
@@ -166,7 +166,7 @@ public class IntegratedIntelligenceController {
     /**
      *分页查询漏洞公告https://security.360.cn/News/affiche
      */
-    @RequestMapping(value = "/getSecuritySpider")
+    @RequestMapping(value = "/SecuritySpider/codition")
     @ResponseBody
     public String getSecuritySpider(@RequestParam(value = "startTime") String startTime,@RequestParam(value = "endTime") String endTime,@RequestParam(value = "content",required = false) String content,@RequestParam(value = "level",required = false) String level,@RequestParam(value = "page",required = false,defaultValue = "1") String page,@RequestParam(value = "size",required = false,defaultValue = "10") String size){
         Map<String,Object> map = new HashMap<>();
@@ -203,7 +203,7 @@ public class IntegratedIntelligenceController {
     /**
      *分页查询漏洞平台https://www.seebug.org/vuldb/vulnerabilities?page=1
      */
-    @RequestMapping(value = "/getSeebugSpider")
+    @RequestMapping(value = "/SeebugSpider/codition")
     @ResponseBody
     public String getSeebugSpider(@RequestParam(value = "startTime") String startTime,@RequestParam(value = "endTime") String endTime,@RequestParam(value = "content",required = false) String content,@RequestParam(value = "type",required = false) String type,@RequestParam(value = "page",required = false,defaultValue = "1") String page,@RequestParam(value = "size",required = false,defaultValue = "10") String size){
         Map<String,Object> map = new HashMap<>();
@@ -240,7 +240,7 @@ public class IntegratedIntelligenceController {
     /**
      *分页查询恶意软件和urls的收集网站http://vxvault.net/ViriList.php?s=0&m=40
      */
-    @RequestMapping(value = "/getVxvault")
+    @RequestMapping(value = "/Vxvault/codition")
     @ResponseBody
     public String getVxvault(@RequestParam(value = "startTime") String startTime,@RequestParam(value = "endTime") String endTime,@RequestParam(value = "content",required = false) String content,@RequestParam(value = "ip",required = false) String ip,@RequestParam(value = "page",required = false,defaultValue = "1") String page,@RequestParam(value = "size",required = false,defaultValue = "10") String size){
         Map<String,Object> map = new HashMap<>();
@@ -277,7 +277,7 @@ public class IntegratedIntelligenceController {
     /**
      *分页查询全球被黑站点统计系统https://www.hacked.com.cn/index.php?page=1
      */
-    @RequestMapping(value = "/getZoneToday")
+    @RequestMapping(value = "/ZoneToday/codition")
     @ResponseBody
     public String getZoneToday(@RequestParam(value = "startTime") String startTime,@RequestParam(value = "endTime") String endTime,@RequestParam(value = "content",required = false) String content,@RequestParam(value = "country",required = false) String country,@RequestParam(value = "os",required = false) String os,@RequestParam(value = "page",required = false,defaultValue = "1") String page,@RequestParam(value = "size",required = false,defaultValue = "10") String size){
         Map<String,Object> map = new HashMap<>();
