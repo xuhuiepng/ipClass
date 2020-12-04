@@ -17,6 +17,18 @@ public class IpRangeEntity {
     @ExcelProperty(index=0)
     private String ipRange;
 
+    public String getIpRange() {
+        return ipRange;
+    }
+
+    public String getEnd() {
+        return end;
+    }
+
+    public String getOrgName() {
+        return orgName;
+    }
+
     @ExcelProperty(index = 1)
     private String end;
     /**

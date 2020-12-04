@@ -66,7 +66,6 @@ public class NtiHistoryController {
         return R.ok().put("page", page);
     }
 
-
     /**
      * 单点信誉查询
      *

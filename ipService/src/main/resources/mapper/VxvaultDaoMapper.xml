@@ -29,55 +29,31 @@
         </if>
         order by time desc
     </select>
-    <select id="getPublicData" resultType="cn.cnic.security.ipservice.common.utils.IntelligenceEntity">
-     select * from (
-     select time,title,url
-     from vxvault
-     union all
-     select time,title,url
-     from cnvd_spider
-     union all
-     select time,title,url
-     from seebug_spider
-     union all
-     select time,title,url
-     from redqueen
-     union all
-     select time,title,url
-     from zone_today
-     union all
-     select time,title,url
-     from security_spider
-     union all
-     select time,title,url
-     from scap_spider
-) as t1
-      limit #{start},#{size}
- </select>
 
-    <select id="count" resultType="Integer">
-     select count(*) from (
-     select time,title,url
+    <select id="getPublicData" resultType="cn.cnic.security.ipservice.common.utils.IntelligenceEntity">
+    select * from (
+     select time,title,url,'vxvault' as tablename
      from vxvault
      union all
-     select time,title,url
+     select time,title,url,'cnvd_spider'
      from cnvd_spider
      union all
-     select time,title,url
+     select time,title,url,'seebug_spider'
      from seebug_spider
      union all
-     select time,title,url
+     select time,title,url,'redqueen'
      from redqueen
      union all
-     select time,title,url
+     select time,title,url,'zone_today'
      from zone_today
      union all
-     select time,title,url
+     select time,title,url,'security_spider'
      from security_spider
      union all
-     select time,title,url
+     select time,title,url,'scap_spider'
      from scap_spider
 ) as t1
+     order by time DESC
  </select>
 
 </mapper>

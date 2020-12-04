@@ -33,14 +33,15 @@ public class IntegratedIntelligenceController {
     /**
      *分页查询所有情报数据
      */
-    @RequestMapping("/getAllintelligence")
+    @RequestMapping("/allintelligence/list")
     @ResponseBody
     public String getAllintelligence(@RequestParam(name = "page",required = false,defaultValue = "1") Integer pagenum,@RequestParam(name = "size",required = false,defaultValue = "20") Integer size){
         Map<String,Object> map = new HashMap<>();
         try {
-            List<IntelligenceEntity> re = integratedintelligence.getAllintelligence(pagenum, size);
-
-            map.put("data",re);
+            Page<IntelligenceEntity> myPage = new Page<>(pagenum, size);
+            integratedintelligence.getAllintelligence(myPage);
+            map.put("sum",myPage.getTotal());
+            map.put("data",myPage.getRecords());
             map.put("code","0");
             map.put("msg","success");
         }

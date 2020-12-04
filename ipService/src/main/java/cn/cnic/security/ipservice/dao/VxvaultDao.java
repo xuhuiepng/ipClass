@@ -26,9 +26,6 @@ public interface VxvaultDao extends BaseMapper<VxvaultEntity> {
     /**
      *查询下标限定在start和end之间的数据
      */
-    public List<IntelligenceEntity> getPublicData(Integer start, Integer size);
-    /**
-     *查询数据条数
-     */
-    public int count();
+    public Page<IntelligenceEntity> getPublicData(Page<IntelligenceEntity> page);
+
 }

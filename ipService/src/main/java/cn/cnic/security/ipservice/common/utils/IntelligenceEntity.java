@@ -5,13 +5,41 @@ import java.util.Date;
 public class IntelligenceEntity {
 
     /**
-     *
+     *时间
      */
     private Date time;
     /**
-     *
+     *标题
      */
     private String title;
+
+    /**
+     *表名
+     */
+    private String tablename;
+
+    /**
+     *url
+     */
+    private String url;
+
+    public String getTablename() {
+        return tablename;
+    }
+
+    public void setTablename(String table_name) {
+        this.tablename = table_name;
+    }
+
+    @Override
+    public String toString() {
+        return "IntelligenceEntity{" +
+                "time=" + time +
+                ", title='" + title + '\'' +
+                ", tablename='" + tablename + '\'' +
+                ", url='" + url + '\'' +
+                '}';
+    }
 
     public Date getTime() {
         return time;
@@ -37,10 +65,6 @@ public class IntelligenceEntity {
         this.url = url;
     }
 
-    /**
-     *
-     */
-    private String url;
 
 
 }
