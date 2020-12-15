@@ -5,12 +5,17 @@ import cn.cnic.security.ipcore.IpQuery2region;
 import cn.cnic.security.ipcore.IpQueryByGeoip2;
 import cn.cnic.security.ipcore.model.IpLocation;
 import cn.cnic.security.ipservice.common.utils.IPUtils;
+import cn.cnic.security.ipservice.common.utils.R;
+import cn.cnic.security.ipservice.model.IpSegmentResponse;
 import cn.cnic.security.ipservice.service.impl.AMapSearchServiceImpl;
 import cn.cnic.security.ipservice.service.impl.IPAPISearchServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * ip定位
@@ -118,6 +123,5 @@ public class SimpleIpLocationService {
         }
         return location;
     }
-
 
 }

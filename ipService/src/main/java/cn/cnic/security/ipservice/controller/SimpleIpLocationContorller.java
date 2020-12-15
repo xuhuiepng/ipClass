@@ -2,12 +2,16 @@ package cn.cnic.security.ipservice.controller;
 
 import cn.cnic.security.ipcore.model.IpLocation;
 import cn.cnic.security.ipservice.common.utils.R;
+import cn.cnic.security.ipservice.entity.NtiHistoryEntity;
 import cn.cnic.security.ipservice.model.IpSegmentResponse;
 import cn.cnic.security.ipservice.service.InstituteInquireService;
 import cn.cnic.security.ipservice.service.IpSelection;
+import cn.cnic.security.ipservice.service.NtiHistoryService;
 import cn.cnic.security.ipservice.service.SimpleIpLocationService;
 import cn.cnic.security.ipservice.service.impl.AMapSearchServiceImpl;
 import cn.cnic.security.ipservice.service.impl.IPAPISearchServiceImpl;
+import cn.cnic.security.ipservice.service.impl.NtiHistoryServiceImpl;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.binary.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +39,12 @@ public class SimpleIpLocationContorller {
     @Autowired
     @Qualifier("ipSelection")
     private IpSelection ipSelection;
+
+    @Autowired
+    private NtiHistoryService ntiHistoryService;
+
+    @Autowired
+    private NtiHistoryServiceImpl ntiHistoryServiceImpl;
 
     @Autowired
     private InstituteInquireService ipRangeService;
@@ -174,6 +184,118 @@ public class SimpleIpLocationContorller {
         R ok = R.ok();
         ok.put("ipSegmentResponses", ipSegmentResponses);
         ok.put("list", list);
+
+        return ok;
+    }
+
+    /**
+     * 全部信息查询,包括信誉
+     *
+     * @param ip
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping(value = "ipAll/{ip}",method = RequestMethod.GET)
+    public R queryIpAll(@PathVariable String ip) throws Exception {
+        if (ip.length() == 0 || "0.0.0.0".equals(ip)) {
+            log.info("输入ip为空或0.0.0.0，自动设为本机ip");
+            InetAddress local = null;
+            String localIp = "";
+            try {
+                local = local.getLocalHost();
+                //String localname = local.getHostName();
+                localIp = local.getHostAddress();
+                ip = localIp;
+                //log.info("本机的ip是 ：" + localIp);
+            } catch (Exception e) {
+                log.info("获取本机ip失败");
+            }
+        }
+
+        //三种本地库方式
+        IpLocation ip2region = null;
+        IpLocation qqwry = null;
+        IpLocation geoLite2 = null;
+        try {
+            ip2region = simpleIpLocationService.query(ip, "ip2region");
+        } catch (Exception e) {
+            log.info("ip2region查询错误 {}", e.getMessage());
+        }
+
+        try {
+            qqwry = simpleIpLocationService.query(ip, "qqwry");
+        } catch (Exception e) {
+            log.info("qqwry查询错误{}",e.getMessage());
+        }
+
+        try {
+            geoLite2 = simpleIpLocationService.query(ip, "geoLite2");
+        } catch (Exception e) {
+            log.info("geoLite2查询错误{}",e.getMessage());
+        }
+
+        //2种远程方式
+        IpLocation aMapIpLocation = null;
+        try {
+            String aMap = aMapSearchService.query(ip);
+            aMapIpLocation = aMapSearchService.formatJsonResult(aMap);
+        } catch (Exception e) {
+            log.error("高德ip查询出错！ip为国外或格式错误！{}", e.getMessage());
+        }
+        IpLocation ipApiLocation = null;
+        try {
+            String ipApi = ipapiSearchService.query(ip);
+            ipApiLocation = ipapiSearchService.formatJsonResult(ipApi);
+        } catch (Exception e) {
+            log.error("ipApi查询出错！{}", e.getMessage());
+        }
+
+
+        //查询ip归属
+        List<IpSegmentResponse> ipSegmentResponses = null;
+        try {
+            ArrayList<String> segmentList = new ArrayList<>(1);
+            segmentList.add(ip);
+            ipSegmentResponses = ipRangeService.searchOrgByList(segmentList);
+            //如果ip归属未研究所，替换运行商
+            if(!ipSegmentResponses.isEmpty()) {
+                IpSegmentResponse se = ipSegmentResponses.get(0);
+                if (!StringUtils.equals("该IP非研究所IP", se.getOrgName())) {
+                    ip2region.setIsp(se.getOrgName());
+                    qqwry.setIsp(se.getOrgName());
+                    geoLite2.setIsp(se.getOrgName());
+                    aMapIpLocation.setIsp(se.getOrgName());
+                    ipApiLocation.setIsp(se.getOrgName());
+                }
+            }
+
+        } catch (Exception e) {
+            log.error("ip归属 {}", e.getMessage());
+        }
+
+        List<IpLocation> list = new ArrayList<>();
+        list.add(ip2region);
+        list.add(qqwry);
+        list.add(geoLite2);
+        list.add(aMapIpLocation);
+        list.add(ipApiLocation);
+
+        //查询信誉
+        QueryWrapper<NtiHistoryEntity> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("ip", ip)
+                .select(NtiHistoryEntity.class,i->!i.getProperty().equals("attackTypeCN"));
+        List<NtiHistoryEntity> list2 = ntiHistoryService.list(queryWrapper);
+        List<NtiHistoryEntity> resList = new ArrayList<>();
+        for (NtiHistoryEntity ntiEntity : list2) {
+            NtiHistoryEntity ntiHistoryEntity = ntiHistoryServiceImpl.attackCode2CN(ntiEntity);
+            NtiHistoryEntity ntiHistoryEntityFormatDate = ntiHistoryServiceImpl.formatDate(ntiHistoryEntity);
+            resList.add(ntiHistoryEntityFormatDate);
+        }
+
+        R ok = R.ok();
+        ok.put("ipSegmentResponses", ipSegmentResponses);
+        ok.put("list", list);
+        ok.put("resList", resList);
 
         return ok;
     }
