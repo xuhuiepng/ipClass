@@ -6,7 +6,7 @@
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>2.3.1.RELEASE</version>
-        <!--  <relativePath/> 从存储库查找父级 -->
+<!--          <relativePath/> -->
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
