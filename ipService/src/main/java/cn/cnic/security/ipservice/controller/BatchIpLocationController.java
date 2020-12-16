@@ -29,7 +29,7 @@ import java.util.Map;
  */
 @RestController
 @Slf4j
-public class BatchIpLocationController {
+public class    BatchIpLocationController {
     @Autowired
     private BatchIpLocationService batchIpLocationService;
 
@@ -95,7 +95,6 @@ public class BatchIpLocationController {
                         EasyExcel.write(response.getOutputStream(), IpLocation.class).sheet().head(headList).doWrite(defaultIpLocations);
                         log.info("写入成功");
                         break;
-
                 }
 
             } catch (RestClientException e){
@@ -163,6 +162,5 @@ public class BatchIpLocationController {
         }
 
     }
-
 
 }
