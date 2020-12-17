@@ -2,10 +2,15 @@ package cn.cnic.security.ipservice.controller;
 
 import cn.cnic.security.ipcore.model.IpLocation;
 import cn.cnic.security.ipservice.common.utils.R;
+import cn.cnic.security.ipservice.common.utils.IpAllMesEntity;
+import cn.cnic.security.ipservice.entity.NtiHistoryEntity;
 import cn.cnic.security.ipservice.model.IpApiResponseEntity;
 import cn.cnic.security.ipservice.model.IpLocationConvertUtil;
+import cn.cnic.security.ipservice.model.IpSegmentResponse;
 import cn.cnic.security.ipservice.service.BatchIpLocationService;
+import cn.cnic.security.ipservice.service.InstituteInquireService;
 import cn.cnic.security.ipservice.service.IpExcelService;
+import cn.cnic.security.ipservice.service.NtiHistoryService;
 import com.alibaba.excel.EasyExcel;
 import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
@@ -19,9 +24,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.URLEncoder;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author baokang
@@ -36,6 +39,12 @@ public class    BatchIpLocationController {
     @Autowired
     private IpExcelService ipExcelService;
 
+    @Autowired
+    private NtiHistoryService ntiHistoryService;
+
+    @Autowired
+    private InstituteInquireService instituteInquireService;
+
     /**
      *批量定位查询-上传文件模式（返回文件下载流）
      *
@@ -46,7 +55,7 @@ public class    BatchIpLocationController {
      */
     @RequestMapping(value = "/location/group", method = RequestMethod.POST, consumes="multipart/form-data")
     public void batchIpLocation(@RequestBody MultipartFile file, String type, HttpServletResponse response) throws IOException {
-        if (file.isEmpty()) {
+        if (file == null || file.isEmpty()) {
             response.setContentType("application/json;charset=UTF-8");
             PrintWriter writer = response.getWriter();
             writer.write(JSON.toJSONString(R.error(1, "文件不存在")));
@@ -117,6 +126,78 @@ public class    BatchIpLocationController {
             }
         }
     }
+
+    /**
+     * 所有数据批量查询-文件上传模式（返回文件下载流）
+     *
+     * @param file
+     * @param response
+     */
+    @RequestMapping(value = "/ipAll/group", method = RequestMethod.POST, consumes = "multipart/form-data")
+    public void queryIpAllGroup(@RequestBody MultipartFile file,HttpServletResponse response) {
+        try {
+            if (file == null || file.isEmpty()) {
+                response.setContentType("application/json;charset=UTF-8");
+                PrintWriter writer = response.getWriter();
+                writer.write(JSON.toJSONString(R.error(1, "文件不存在")));
+                writer.flush();
+                writer.close();
+            } else {
+                try {
+//                    Map<String,List<String>> res = ipExcelService.excel2IpList(file);
+//                    List<String> ips = res.get("ips");
+//                    List<String> ipsErr = res.get("ipsErr");
+                    List<String> ips = ipExcelService.excel2IpListNotFilter(file);
+                    response.setContentType("application/vnd.ms-excel");
+                    response.setCharacterEncoding("utf-8");
+                    String[] heads = {"查询ip","数据源","国家","省级","城市","经度","纬度","运营商","ip段划分","归属机构","时间","攻击类型","评分","评分等级","来源"};
+                    List<List<String>> headList = ipExcelService.getIpLocationHead(heads);
+
+                    List<IpLocation> defaultIpLocations = batchIpLocationService.regionAndGeoipBatchIpQuery(ips);
+                    List<IpSegmentResponse> ipSegmentResponseList = instituteInquireService.searchOrgByList(ips);
+                    List<NtiHistoryEntity> ntiHistoryEntities = ntiHistoryService.ntihistoryBatchIpQuery(ips);
+                    //ipSegmentResponseList = ipExcelService.ErrIp2IpClass(ipsErr,ipSegmentResponseList);
+                    List<IpAllMesEntity> alllist = new ArrayList<>();
+
+                    int size = defaultIpLocations.size();
+                    int sizenti = ntiHistoryEntities.size();
+                    for(int i=0;i<size;i++)
+                    {
+                        IpAllMesEntity ipAllMesEntity;
+                        if(i>=sizenti)
+                        {
+                            NtiHistoryEntity ntiHistoryEntity = new NtiHistoryEntity();
+                            ipAllMesEntity = new IpAllMesEntity(defaultIpLocations.get(i),ipSegmentResponseList.get(i),ntiHistoryEntity);
+                        }
+                        else
+                            ipAllMesEntity = new IpAllMesEntity(defaultIpLocations.get(i),ipSegmentResponseList.get(i),ntiHistoryEntities.get(i));
+                        alllist.add(ipAllMesEntity);
+                    }
+
+                    log.info("开始写文件···");
+                    String ipSegmentFileName = URLEncoder.encode("ipAllMes", "UTF-8");
+                    response.setHeader("Content-disposition", "attachment;filename=" + ipSegmentFileName + ".xlsx");
+                    EasyExcel.write(response.getOutputStream(), IpApiResponseEntity.class).sheet().head(headList).doWrite(alllist);
+                    log.info("写入成功");
+
+                } catch (Exception e) {
+                    response.setContentType("application/json;charset=UTF-8");
+                    PrintWriter writer = response.getWriter();
+                    writer.write(JSON.toJSONString(R.error(1, "文件读取/写入失败")));
+                    writer.flush();
+                    writer.close();
+                    log.error("文件读取/写入失败");
+                    e.printStackTrace();
+                }
+
+            }
+
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+        }
+    }
+
+
 
     /**
      * 批量定位查询-list查询模式（返回json数据）

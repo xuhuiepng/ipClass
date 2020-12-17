@@ -96,17 +96,13 @@ public class InstituteInquireController {
                 writer.close();
             } else {
                 try {
-//                    Map<String,List<String>> res = ipExcelService.excel2IpList(file);
-//                    List<String> ips = res.get("ips");
-//                    List<String> ipsErr = res.get("ipsErr");
+//
                     List<String> ips = ipExcelService.excel2IpListNotFilter(file);
                     response.setContentType("application/vnd.ms-excel");
                     response.setCharacterEncoding("utf-8");
                     String[] heads = {"查询ip", "归属机构"};
                     List<List<String>> headList = ipExcelService.getIpLocationHead(heads);
-
                     List<IpSegmentResponse> ipSegmentResponseList = instituteInquireService.searchOrgByList(ips);
-                    //ipSegmentResponseList = ipExcelService.ErrIp2IpClass(ipsErr,ipSegmentResponseList);
 
                     log.info("开始写文件···");
                     String ipSegmentFileName = URLEncoder.encode("ipSegmentSearchRes", "UTF-8");

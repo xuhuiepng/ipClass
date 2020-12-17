@@ -18,13 +18,12 @@ public class IpLocation {
     private String province;
     //城市
     private String city;
-
+    //经度
     private Double lat;
-
+    //纬度
     private Double lon;
     //运行商
     private String isp;
-
     //ip段划分
     private String network;
     
