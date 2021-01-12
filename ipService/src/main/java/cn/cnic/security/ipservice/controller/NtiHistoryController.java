@@ -137,38 +137,4 @@ public class NtiHistoryController {
         }
     }
 
-
-    /**
-     * 保存
-     */
-//    @PutMapping("/save")
-    public R save(@RequestBody NtiHistoryEntity ntiHistory){
-        ntiHistoryService.save(ntiHistory);
-        return R.ok();
-    }
-
-    /**
-     * 修改
-     */
-//    @PostMapping("/update")
-    public R update(@RequestBody NtiHistoryEntity ntiHistory){
-        ntiHistoryService.updateById(ntiHistory);
-
-        return R.ok();
-    }
-
-    /**
-     * 删除
-     */
-//    @DeleteMapping("/delete")
-    public R delete(@RequestBody Date[] historyDates){
-        ntiHistoryService.removeByIds(Arrays.asList(historyDates));
-
-        return R.ok();
-    }
-
-
-
-
-
 }

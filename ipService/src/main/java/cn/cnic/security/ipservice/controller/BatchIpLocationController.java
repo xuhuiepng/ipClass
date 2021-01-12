@@ -19,11 +19,11 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.URLEncoder;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
+
 
 /**
+ * 批量查询
  * @author baokang
  * @date 2020/7/30 22:10
  */
@@ -46,12 +46,12 @@ public class BatchIpLocationController {
      */
     @RequestMapping(value = "/location/group", method = RequestMethod.POST, consumes="multipart/form-data")
     public void batchIpLocation(@RequestBody MultipartFile file, String type, HttpServletResponse response) throws IOException {
+        PrintWriter writer = null;
         if (file.isEmpty()) {
             response.setContentType("application/json;charset=UTF-8");
-            PrintWriter writer = response.getWriter();
+            writer = response.getWriter();
             writer.write(JSON.toJSONString(R.error(1, "文件不存在")));
-            writer.flush();
-            writer.close();
+
         } else {
             try {
 //                Map<String,List<String>> res = ipExcelService.excel2IpList(file);
@@ -100,21 +100,25 @@ public class BatchIpLocationController {
 
             } catch (RestClientException e){
                 response.setContentType("application/json;charset=UTF-8");
-                PrintWriter writer = response.getWriter();
+                writer = response.getWriter();
                 writer.write(JSON.toJSONString(R.error(1, "远程查询冷却中···2分钟后再进行远程查询")));
                 writer.flush();
                 writer.close();
-                e.printStackTrace();
-                log.error("远程查询冷却中···");
+
+                log.error("远程查询冷却中··· {}",e.getMessage());
 
             } catch (Exception e) {
                 response.setContentType("application/json;charset=UTF-8");
-                PrintWriter writer = response.getWriter();
+                writer = response.getWriter();
                 writer.write(JSON.toJSONString(R.error(1, "文件读取/写入失败")));
-                writer.flush();
-                writer.close();
-                log.error("文件读取/写入失败");
-                e.printStackTrace();
+
+                log.error("文件读取/写入失败 {}",e.getMessage());
+
+            }finally {
+                if(writer != null){
+                    writer.flush();
+                    writer.close();
+                }
             }
         }
     }

@@ -15,7 +15,7 @@ class IpQueryByGeoip2 extends abstractXX implements IpQuery
 
 abstractXX只个预留，方便以后重构时，提取重复代码。
 
-#### geoip更新本地数据库的方法如下：（2020/9/8更新）
+#### geoip更新本地数据库的方法如下：（2021/1/6更新）
 
 1.注册maxmind账号
 
@@ -25,7 +25,7 @@ abstractXX只个预留，方便以后重构时，提取重复代码。
 
   <img src="img\download_db3.png" alt="Image text" style="zoom: 33%;" />
 
-- 进入后选择free trial account
+- 进入后选择free trial account 
 
   ![Image text](img\download_db4.png)
 
@@ -37,6 +37,8 @@ abstractXX只个预留，方便以后重构时，提取重复代码。
 
 进入个人账户，进行数据库下载
 
+补充说明：有可能没有开通GeoIP2 / GeoLite2 服务，需要注册一下。已注册的账号无法截图了。
+
 ![Image text](img\download_db1.png)
 
 3.选择需要的版本进行下载，这里我们下载geolite2 city（.mmdb）文件
@@ -44,9 +46,10 @@ abstractXX只个预留，方便以后重构时，提取重复代码。
 ![Image text](img\download_db2.png)
 
 #### 纯真IP更新时间
-更新时间：2020-9-10
+更新时间：2020-12-19
 地址：https://github.com/out0fmemory/qqwry.dat
-
+http://update.cz88.net/ip/qqwry.rar
+http://update.cz88.net/ip/copywrite.rar
 
 #### ip2region更新时间
 更新时间：2020-6-13
