@@ -62,12 +62,18 @@
         <fieldset class="layui-elem-field layui-field-title">
             <legend>各库查询结果</legend>
         </fieldset>
-        <table class="layui-hide" id="AllTableId" lay-filter="currentTableFilter"></table>
+        <table class="layui-hide" id="PositionTableId" lay-filter="currentTableFilter"></table>
 
         <fieldset class="layui-elem-field layui-field-title">
             <legend>信誉历史</legend>
         </fieldset>
         <table class="layui-hide" id="HistoryTableId" lay-filter="currentTableFilter"></table>
+
+        <fieldset class="layui-elem-field layui-field-title">
+            <legend>全部查询结果</legend>
+        </fieldset>
+
+        <table class="layui-hide" id="AllTableId" lay-filter="currentTableFilter"></table>
     </div>
 </div>
 
@@ -118,7 +124,7 @@
 
             //所有
             table.render({
-                elem: '#AllTableId',
+                elem: '#PositionTableId',
                 url: '/ipInfo/'+ip,
                 parseData: function (res) { //res 即为原始返回的数据
                     return {

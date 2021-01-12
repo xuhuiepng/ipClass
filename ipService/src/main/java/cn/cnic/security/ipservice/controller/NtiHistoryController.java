@@ -97,7 +97,7 @@ public class NtiHistoryController {
      */
     @RequestMapping(value = "/credit/group", method = RequestMethod.POST,consumes="multipart/form-data")
     public void batchIpNtihistory(@RequestBody MultipartFile file, HttpServletResponse response) throws IOException {
-        if (file.isEmpty()) {
+        if (file == null || file.isEmpty()) {
             response.setContentType("application/json;charset=UTF-8");
             PrintWriter writer = response.getWriter();
             writer.write(JSON.toJSONString(R.error(1, "文件不存在")));
@@ -105,19 +105,17 @@ public class NtiHistoryController {
             writer.close();
         } else {
             try {
-//                Map<String,List<String>> res = ipExcelService.excel2IpList(file);
-//                List<String> ips = res.get("ips");
-//                List<String> ipsErr = res.get("ipsErr");
+//
                 //未过滤读取
                 List<String> ips = ipExcelService.excel2IpListNotFilter(file);
 //                //去重
-//                List<String> ips_distinct = ips.stream().distinct().collect(Collectors.toList());
-
                 response.setContentType("application/vnd.ms-excel");
                 response.setCharacterEncoding("utf-8");
                 String[] heads = {"ip","时间","攻击类型","评分","评分等级","来源"};
                 List<List<String>> headList = ipExcelService.getIpLocationHead(heads);
                 List<NtiHistoryEntity> ntiHistoryEntities = ntiHistoryService.ntihistoryBatchIpQuery(ips);
+
+
                 //ntiHistoryEntities = ipExcelService.ErrIp2IpClass(ipsErr,ntiHistoryEntities);
                 log.info("开始写文件···");
                 String DefaultFileName = URLEncoder.encode("batchIpNtihistory", "UTF-8");
